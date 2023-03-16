@@ -16,8 +16,8 @@
 		0A9F080A29C2761800932207 /* WeatherAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9F080929C2761800932207 /* WeatherAppTests.swift */; };
 		0A9F081429C2761800932207 /* WeatherAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9F081329C2761800932207 /* WeatherAppUITests.swift */; };
 		0A9F081629C2761800932207 /* WeatherAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9F081529C2761800932207 /* WeatherAppUITestsLaunchTests.swift */; };
-		0A9F082929C2771100932207 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9F082829C2771100932207 /* MapViewController.swift */; };
-		0A9F082B29C2771F00932207 /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9F082A29C2771F00932207 /* MapViewModel.swift */; };
+		0A9F082929C2771100932207 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9F082829C2771100932207 /* SearchViewController.swift */; };
+		0A9F082B29C2771F00932207 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9F082A29C2771F00932207 /* SearchViewModel.swift */; };
 		0A9F082D29C2773500932207 /* WeatherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9F082C29C2773500932207 /* WeatherManager.swift */; };
 		0A9F082F29C277AA00932207 /* ApiCaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9F082E29C277AA00932207 /* ApiCaller.swift */; };
 /* End PBXBuildFile section */
@@ -53,8 +53,8 @@
 		0A9F080F29C2761800932207 /* WeatherAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeatherAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A9F081329C2761800932207 /* WeatherAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherAppUITests.swift; sourceTree = "<group>"; };
 		0A9F081529C2761800932207 /* WeatherAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		0A9F082829C2771100932207 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
-		0A9F082A29C2771F00932207 /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
+		0A9F082829C2771100932207 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		0A9F082A29C2771F00932207 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		0A9F082C29C2773500932207 /* WeatherManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherManager.swift; sourceTree = "<group>"; };
 		0A9F082E29C277AA00932207 /* ApiCaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiCaller.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -174,7 +174,7 @@
 		0A9F082629C276E000932207 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				0A9F082829C2771100932207 /* MapViewController.swift */,
+				0A9F082829C2771100932207 /* SearchViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -182,7 +182,7 @@
 		0A9F082729C276E900932207 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				0A9F082A29C2771F00932207 /* MapViewModel.swift */,
+				0A9F082A29C2771F00932207 /* SearchViewModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -321,10 +321,10 @@
 				0A9F082D29C2773500932207 /* WeatherManager.swift in Sources */,
 				0A9F07F729C2761700932207 /* ViewController.swift in Sources */,
 				0A9F082F29C277AA00932207 /* ApiCaller.swift in Sources */,
-				0A9F082B29C2771F00932207 /* MapViewModel.swift in Sources */,
+				0A9F082B29C2771F00932207 /* SearchViewModel.swift in Sources */,
 				0A9F07F329C2761700932207 /* AppDelegate.swift in Sources */,
 				0A9F07F529C2761700932207 /* SceneDelegate.swift in Sources */,
-				0A9F082929C2771100932207 /* MapViewController.swift in Sources */,
+				0A9F082929C2771100932207 /* SearchViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

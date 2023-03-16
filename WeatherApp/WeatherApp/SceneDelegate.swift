@@ -19,8 +19,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
         window?.makeKeyAndVisible()
-        let vm = MapViewModel()
-        let vc = MapViewController(vm)
+        let vm = SearchViewModel()
+        let vc = SearchViewController(vm)
         window?.rootViewController = vc
     }
 
