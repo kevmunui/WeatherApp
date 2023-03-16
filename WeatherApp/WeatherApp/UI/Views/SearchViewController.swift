@@ -7,11 +7,14 @@
 
 import Foundation
 import UIKit
+import CoreLocation
 
 class SearchViewController: UIViewController {
     
     // MARK: - variables
     var viewModel:SearchViewModel?
+    private let locationManager = CLLocationManager()
+
     
     // MARK: - Initialization
     init(_ vm: SearchViewModel) {
@@ -111,6 +114,8 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.fetchLastSearchCity()
+        locationManager.delegate = self
+        locationManager.requestAlwaysAuthorization()
     }
     
     // MARK: - UI Components
@@ -275,36 +280,82 @@ class SearchViewController: UIViewController {
     }
     
     func fetchLastSearchCity() {
-        if let vm = self.viewModel {
-            self.errorLabel.alpha = 0
-            self.searchAgainButton.alpha = 1
-            self.spinnerView.startAnimating()
-            vm.handleFetchWeatherLastCity { cityData, error  in
-                if let error = error {
-                    // Change label in the main thread
-                    DispatchQueue.main.async {
-                        self.spinnerView.stopAnimating()
-                        self.errorLabel.alpha = 1
-                        self.searchBar.alpha = 1
-                        self.errorLabel.text = error.localizedDescription.description
-                    }
-                } else {
-                    DispatchQueue.main.async {
-                        // display data
-                        if let newCityData = cityData, let main = newCityData.main, let weather = newCityData.weather, let clouds = newCityData.clouds, let coord = newCityData.coord {
+        if let vm = self.viewModel, let manager = vm.weatherManager, let currCitySaved = manager.lastSearchCity {
+            if currCitySaved != "" {
+                self.errorLabel.alpha = 0
+                self.searchAgainButton.alpha = 1
+                self.spinnerView.startAnimating()
+                vm.handleFetchWeatherLastCity { cityData, error  in
+                    if let error = error {
+                        // Change label in the main thread
+                        DispatchQueue.main.async {
                             self.spinnerView.stopAnimating()
-                            self.searchAgainButton.alpha = 1
-                            self.searchBar.alpha = 0
-                            self.showLabels()
-                            self.cityNameLabel.text = newCityData.name
-                            self.temperatureLabel.text = "\(String(describing: self.kelvinToFahrenheit(kelvin: main.temp))) F"
-                            self.descritionLabel.text = weather[0].description
-                            self.highTempLabel.text = "H:\(String(describing: self.kelvinToFahrenheit(kelvin: main.temp_max)))"
-                            self.lowTempLabel.text = "L:\(String(describing: self.kelvinToFahrenheit(kelvin: main.temp_min)))"
-                            self.cloudCoverLabel.text = "Cloud cover is \(String(describing: clouds.all))%"
-                            self.longLabel.text = "Lon:\(String(describing: coord.lon))"
-                            self.latLabel.text = "Lat:\(String(describing: coord.lat))"
-                            
+                            self.errorLabel.alpha = 1
+                            self.searchBar.alpha = 1
+                            self.errorLabel.text = error.localizedDescription.description
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            // display data
+                            if let newCityData = cityData, let main = newCityData.main, let weather = newCityData.weather, let clouds = newCityData.clouds, let coord = newCityData.coord {
+                                self.spinnerView.stopAnimating()
+                                self.searchAgainButton.alpha = 1
+                                self.searchBar.alpha = 0
+                                self.showLabels()
+                                self.cityNameLabel.text = newCityData.name
+                                self.temperatureLabel.text = "\(String(describing: self.kelvinToFahrenheit(kelvin: main.temp))) F"
+                                self.descritionLabel.text = weather[0].description
+                                self.highTempLabel.text = "H:\(String(describing: self.kelvinToFahrenheit(kelvin: main.temp_max)))"
+                                self.lowTempLabel.text = "L:\(String(describing: self.kelvinToFahrenheit(kelvin: main.temp_min)))"
+                                self.cloudCoverLabel.text = "Cloud cover is \(String(describing: clouds.all))%"
+                                self.longLabel.text = "Lon:\(String(describing: coord.lon))"
+                                self.latLabel.text = "Lat:\(String(describing: coord.lat))"
+                                
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func fetchDefaultWeather() {
+        let defaultCity = "Miami"
+        if let vm = self.viewModel, let manager = vm.weatherManager, let currCitySaved = manager.lastSearchCity {
+            // if currCitySaved != "" -> this is the first time load with denied
+            // if currCitySaved != "" && currCitySaved == defaultCity -> User already searched
+            // a city but denied sharing location with us
+            if currCitySaved == "" || (currCitySaved != "" && currCitySaved == defaultCity) {
+                self.errorLabel.alpha = 0
+                self.searchAgainButton.alpha = 1
+                self.spinnerView.startAnimating()
+                vm.handleFetchWeatherByCity(defaultCity) { cityData, error  in
+                    if let error = error {
+                        // Change label in the main thread
+                        DispatchQueue.main.async {
+                            self.spinnerView.stopAnimating()
+                            self.errorLabel.alpha = 1
+                            self.searchBar.alpha = 1
+                            self.errorLabel.text = error.localizedDescription.description
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            // display data
+                            if let newCityData = cityData, let main = newCityData.main, let weather = newCityData.weather, let clouds = newCityData.clouds, let coord = newCityData.coord {
+                                self.spinnerView.stopAnimating()
+                                self.searchAgainButton.alpha = 1
+                                self.searchBar.alpha = 0
+                                self.showLabels()
+                                self.cityNameLabel.text = newCityData.name
+                                self.temperatureLabel.text = "\(String(describing: self.kelvinToFahrenheit(kelvin: main.temp))) F"
+                                self.descritionLabel.text = weather[0].description
+                                self.highTempLabel.text = "H:\(String(describing: self.kelvinToFahrenheit(kelvin: main.temp_max)))"
+                                self.lowTempLabel.text = "L:\(String(describing: self.kelvinToFahrenheit(kelvin: main.temp_min)))"
+                                self.cloudCoverLabel.text = "Cloud cover is \(String(describing: clouds.all))%"
+                                self.longLabel.text = "Lon:\(String(describing: coord.lon))"
+                                self.latLabel.text = "Lat:\(String(describing: coord.lat))"
+                                
+                            }
                         }
                     }
                 }
@@ -360,4 +411,43 @@ extension SearchViewController: UISearchBarDelegate {
         // Perform search action here
         self.fetchWeatherData()
     }
+}
+
+// MARK: - CLLocationManagerDelegate
+extension SearchViewController: CLLocationManagerDelegate {
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        switch status {
+        case .authorizedAlways, .authorizedWhenInUse:
+            locationManager.requestLocation()
+            return
+        case .notDetermined, .restricted, .denied:
+            // Handle cases where the app does not have the required permissions
+            // Default to Miami
+            self.fetchDefaultWeather()
+            return
+        @unknown default:
+            // Handle any future cases that may be added to the CLAuthorizationStatus enumeration
+            // Default to Miami
+            self.fetchDefaultWeather()
+            return
+        }
+    }
+
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let location = locations.first {
+            print("User's location: \(location)")
+        }
+        // pass this location to the manager to fetch data
+    }
+
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        self.errorLabel.alpha = 1
+        // Allow user to research incase there is an error
+        self.searchBar.alpha = 1
+        self.hideLabels()
+        self.errorLabel.text = error.localizedDescription.description
+    }
+
 }

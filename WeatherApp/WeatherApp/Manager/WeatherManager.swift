@@ -15,6 +15,7 @@ class WeatherManager {
     private let apiKey = "0b672e355f8ab3bf7a35fe4ede42b180"
     private let baseURL = "https://api.openweathermap.org/data/2.5/weather?q="
     var lastSearchCity:String?
+    // var lastCityUpdatedByUser
     
     private init() {
         fetchLastSearchCity()
