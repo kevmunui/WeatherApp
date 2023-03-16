@@ -14,8 +14,22 @@ class WeatherManager {
     
     private let apiKey = "0b672e355f8ab3bf7a35fe4ede42b180"
     private let baseURL = "https://api.openweathermap.org/data/2.5/weather?q="
+    var lastSearchCity:String?
     
-    private init() {} // Private initializer to ensure only one instance is created
+    private init() {
+        fetchLastSearchCity()
+    } // Private initializer to ensure only one instance is created
+    
+    func fetchLastSearchCity() {
+        if let storedCity = UserDefaults.standard.value(forKey: "searchCity") as? String {
+            self.lastSearchCity = storedCity
+        }
+    }
+    
+    func setLastSearchCity(_ searchCity:String) {
+        UserDefaults.standard.setValue(searchCity, forKey: "searchCity")
+        self.lastSearchCity = searchCity
+    }
     
     func fetchWeatherData(forCity cityName: String, completion: @escaping (Result<WeatherResponse, Error>) -> Void) {
         let escapedCityName = cityName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? cityName

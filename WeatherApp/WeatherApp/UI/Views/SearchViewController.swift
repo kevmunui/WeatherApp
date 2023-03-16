@@ -18,6 +18,7 @@ class SearchViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         self.viewModel = vm
         self.initializeUI()
+        
     }
     
     func initializeUI() {
@@ -53,27 +54,39 @@ class SearchViewController: UIViewController {
         
         
         cityNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        cityNameLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 35).isActive = true
+        cityNameLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 55).isActive = true
         
         temperatureLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        temperatureLabel.topAnchor.constraint(equalTo: cityNameLabel.bottomAnchor, constant: 15).isActive = true
+        temperatureLabel.topAnchor.constraint(equalTo: cityNameLabel.bottomAnchor, constant: 35).isActive = true
         
         descritionLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        descritionLabel.topAnchor.constraint(equalTo: temperatureLabel.bottomAnchor, constant: 15).isActive = true
-        descritionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -30).isActive = true
-        descritionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 30).isActive = true
+        descritionLabel.topAnchor.constraint(equalTo: temperatureLabel.bottomAnchor, constant: 25).isActive = true
+        descritionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30).isActive = true
+        descritionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30).isActive = true
         
-        highTempLabel.topAnchor.constraint(equalTo: descritionLabel.bottomAnchor, constant: 15).isActive = true
-        highTempLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 30).isActive = true
+        highTempLabel.topAnchor.constraint(equalTo: descritionLabel.bottomAnchor, constant: 25).isActive = true
+        highTempLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 225).isActive = true
         
-        lowTempLabel.topAnchor.constraint(equalTo: descritionLabel.bottomAnchor, constant: 15).isActive = true
-        lowTempLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -30).isActive = true
+        lowTempLabel.topAnchor.constraint(equalTo: descritionLabel.bottomAnchor, constant: 25).isActive = true
+        lowTempLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 125).isActive = true
         
-        cloudCoverLabel.topAnchor.constraint(equalTo: lowTempLabel.bottomAnchor, constant: 15).isActive = true
+        cloudCoverLabel.topAnchor.constraint(equalTo: lowTempLabel.bottomAnchor, constant: 25).isActive = true
         cloudCoverLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        
+        coordLabel.topAnchor.constraint(equalTo: cloudCoverLabel.bottomAnchor, constant: 25).isActive = true
+        coordLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+
+        longLabel.topAnchor.constraint(equalTo: coordLabel.bottomAnchor, constant: 25).isActive = true
+        longLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 225).isActive = true
+        
+        latLabel.topAnchor.constraint(equalTo: coordLabel.bottomAnchor, constant: 25).isActive = true
+        latLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 100).isActive = true
         
         searchAgainButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         searchAgainButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -30).isActive = true
+        searchAgainButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -50).isActive = true
+        searchAgainButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50).isActive = true
+        searchAgainButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
     }
     
     private func setupSearchBar() {
@@ -97,75 +110,72 @@ class SearchViewController: UIViewController {
     // MARK: - Life-cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.fetchLastSearchCity()
     }
     
     // MARK: - UI Components
     var cityNameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: 28, weight: .semibold)
         return label
     }()
     
     var temperatureLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: 32, weight: .thin)
         return label
     }()
+    
     var descritionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         return label
     }()
     
     var highTempLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         return label
     }()
     
     var lowTempLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-        return label
-    }()
-    
-    var spinnerViewLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         return label
     }()
     
     var cloudCoverLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         return label
     }()
     
     var coordLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        label.text = "Coordinates"
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         return label
     }()
     
     var longLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         return label
     }()
     
     var latLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         return label
     }()
     
@@ -192,7 +202,12 @@ class SearchViewController: UIViewController {
         return lb
     }()
     
-   
+    var spinnerViewLabel: UILabel = {
+        let label = UILabel(frame: CGRect(x: 20, y:55, width: 100, height: 30))
+        label.text = "Searching"
+        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        return label
+    }()
     
     var spinnerView: UIActivityIndicatorView = {
        let atv = UIActivityIndicatorView()
@@ -230,6 +245,11 @@ class SearchViewController: UIViewController {
     
     // MARK: - Business Logic
     
+    func kelvinToFahrenheit(kelvin: Double) -> Double {
+        let fahrenheit = (kelvin - 273.15) * 9 / 5 + 32
+        return (fahrenheit * 100).rounded() / 100
+    }
+    
     func showLabels() {
         self.cityNameLabel.alpha = 1
         self.temperatureLabel.alpha = 1
@@ -254,13 +274,51 @@ class SearchViewController: UIViewController {
         self.latLabel.alpha = 0
     }
     
+    func fetchLastSearchCity() {
+        if let vm = self.viewModel {
+            self.errorLabel.alpha = 0
+            self.searchAgainButton.alpha = 1
+            self.spinnerView.startAnimating()
+            vm.handleFetchWeatherLastCity { cityData, error  in
+                if let error = error {
+                    // Change label in the main thread
+                    DispatchQueue.main.async {
+                        self.spinnerView.stopAnimating()
+                        self.errorLabel.alpha = 1
+                        self.searchBar.alpha = 1
+                        self.errorLabel.text = error.localizedDescription.description
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        // display data
+                        if let newCityData = cityData, let main = newCityData.main, let weather = newCityData.weather, let clouds = newCityData.clouds, let coord = newCityData.coord {
+                            self.spinnerView.stopAnimating()
+                            self.searchAgainButton.alpha = 1
+                            self.searchBar.alpha = 0
+                            self.showLabels()
+                            self.cityNameLabel.text = newCityData.name
+                            self.temperatureLabel.text = "\(String(describing: self.kelvinToFahrenheit(kelvin: main.temp))) F"
+                            self.descritionLabel.text = weather[0].description
+                            self.highTempLabel.text = "H:\(String(describing: self.kelvinToFahrenheit(kelvin: main.temp_max)))"
+                            self.lowTempLabel.text = "L:\(String(describing: self.kelvinToFahrenheit(kelvin: main.temp_min)))"
+                            self.cloudCoverLabel.text = "Cloud cover is \(String(describing: clouds.all))%"
+                            self.longLabel.text = "Lon:\(String(describing: coord.lon))"
+                            self.latLabel.text = "Lat:\(String(describing: coord.lat))"
+                            
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     func fetchWeatherData() {
         if let searchText = self.searchBar.text, let vm = self.viewModel {
             if searchText != "" {
                 self.errorLabel.alpha = 0
                 self.searchAgainButton.alpha = 1
                 self.spinnerView.startAnimating()
-                vm.handleFetchWeatherBtCity(searchText) { cityData, error  in
+                vm.handleFetchWeatherByCity(searchText) { cityData, error  in
                     if let error = error {
                         // Change label in the main thread
                         DispatchQueue.main.async {
@@ -272,19 +330,19 @@ class SearchViewController: UIViewController {
                     } else {
                         DispatchQueue.main.async {
                             // display data
-                            if let newCityData = cityData {
+                            if let newCityData = cityData, let main = newCityData.main, let weather = newCityData.weather, let clouds = newCityData.clouds, let coord = newCityData.coord {
                                 self.spinnerView.stopAnimating()
                                 self.searchAgainButton.alpha = 1
                                 self.searchBar.alpha = 0
                                 self.showLabels()
                                 self.cityNameLabel.text = newCityData.name
-                                self.temperatureLabel.text = "\(String(describing: newCityData.main?.temp))"
-                                self.descritionLabel.text = newCityData.weather?.description
-                                self.highTempLabel.text = "H:\(String(describing: newCityData.main?.temp_max))"
-                                self.lowTempLabel.text = "L:\(String(describing: newCityData.main?.temp_min))"
-                                self.cloudCoverLabel.text = "Cloud cover is \(String(describing: newCityData.clouds?.all))%"
-                                self.longLabel.text = "\(String(describing: newCityData.coord?.lon))"
-                                self.latLabel.text = "\(String(describing: newCityData.coord?.lat))"
+                                self.temperatureLabel.text = "\(String(describing: self.kelvinToFahrenheit(kelvin: main.temp))) F"
+                                self.descritionLabel.text = weather[0].description
+                                self.highTempLabel.text = "H:\(String(describing: self.kelvinToFahrenheit(kelvin: main.temp_max)))"
+                                self.lowTempLabel.text = "L:\(String(describing: self.kelvinToFahrenheit(kelvin: main.temp_min)))"
+                                self.cloudCoverLabel.text = "Cloud cover is \(String(describing: clouds.all))%"
+                                self.longLabel.text = "Lon:\(String(describing: coord.lon))"
+                                self.latLabel.text = "Lat:\(String(describing: coord.lat))"
                                 
                             }
                         }

@@ -16,18 +16,36 @@ class SearchViewModel {
     }
     
     
+    // MARK: - Handle fetch last city
+    func handleFetchWeatherLastCity(completion: @escaping (WeatherResponse?, Error?) -> Void) {
+        if let manager = self.weatherManager, let city = manager.lastSearchCity {
+            manager.fetchWeatherData(forCity: city) { result in
+                switch result {
+                case .success(let data):
+                    // Handle the weather data
+                    completion(data, nil)
+                case .failure(let error):
+                    // Handle the error
+                    completion(nil, error)
+                }
+            }
+        }
+    }
+    
     // MARK: - Handle fetch call
-    func handleFetchWeatherBtCity(_ city:String, completion: @escaping(WeatherResponse?, Error?) -> Void) {
+    func handleFetchWeatherByCity(_ city: String, completion: @escaping (WeatherResponse?, Error?) -> Void) {
         if let manager = self.weatherManager {
             manager.fetchWeatherData(forCity: city) { result in
                 switch result {
                 case .success(let data):
                     // Handle the weather data
-                    print("Weather data: \(data)")
+                    if let searchCity = data.name {
+                        // Store searchCity in UserDefaults
+                        manager.setLastSearchCity(searchCity)
+                    }
                     completion(data, nil)
                 case .failure(let error):
                     // Handle the error
-                    print("Error: \(error.localizedDescription)")
                     completion(nil, error)
                 }
             }
