@@ -19,7 +19,7 @@
     - Designed a Model-View-ViewModel (MVVM) architecture to separate the data layer from the UI layer for better debugging and testing.
     - Defined the views and view models.
     - Implemented an API caller class to make HTTP requests to the server.
-    - Created a singleton stock manager to handle weather fetching data throughout the app's life-cycle.
+    - Created a singleton weather manager to handle weather fetching data throughout the app's life-cycle.
     
 3.) App Setup Stage (15 mins):
 
