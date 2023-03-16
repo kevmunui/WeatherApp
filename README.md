@@ -49,3 +49,25 @@
 
 App consists of 2 main pages:
 
+### Landing page
+  - User is first shown a dialog asking for location permissions
+  - If user accepts, we use their co-ordinates and fetch the current location
+  - If user rejects we use the base city of Miami as default
+  - If user closes the app, if they have shared the location, we we reload the old location, else w fetch the previously search location if it exists
+  
+  ### First Page
+   <img src="https://user-images.githubusercontent.com/10658722/225718621-2cb415f5-69b2-41bb-877d-3f203bf37fce.png" width="300" height="650" />
+   
+  ### Search query
+   <img src="https://user-images.githubusercontent.com/10658722/225718805-bb038fe2-0793-4539-b585-3c35ad1d1507.png" width="300" height="650" />
+
+  ### Results page
+  - This page displays the results from the API call
+  - If success, the search bar is hidden and result printed, a new search button appears to research
+  - if error, an error label displays and allows a user to search again
+  
+  ### Result page, default
+   <img src="https://user-images.githubusercontent.com/10658722/225718857-62bc3d49-1810-4e03-9604-47be3df61509.png" width="300" height="650" />
+   
+  ### Result page, location based
+   <img src="https://user-images.githubusercontent.com/10658722/225718967-67341343-5a76-4ab0-adf5-c14a62d81dce.png" width="300" height="650" />
