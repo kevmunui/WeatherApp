@@ -71,3 +71,8 @@ App consists of 2 main pages:
    
   ### Result page, location based
    <img src="https://user-images.githubusercontent.com/10658722/225718967-67341343-5a76-4ab0-adf5-c14a62d81dce.png" width="300" height="650" />
+   
+## Notes:
+- Images, we get back an image icon code, ideally I would map these icons locally with the respective images and render them according to the response. I did not find an icon key/value table making the process of identifying each icon tidious.
+- Error handling, when we get a correct response we get bback a cod value as an int, bit if its and error it gives back 404 as a string. I would write a bit more logic to differenciate between the two codes to return the specific '404- not found' message on an non exisiting place.
+
