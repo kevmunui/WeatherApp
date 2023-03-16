@@ -14,7 +14,8 @@ class SearchViewController: UIViewController {
     // MARK: - variables
     var viewModel:SearchViewModel?
     private let locationManager = CLLocationManager()
-
+    var hasAuthorized:Bool?
+    var hasStartedUpdatingLocation = false
     
     // MARK: - Initialization
     init(_ vm: SearchViewModel) {
@@ -47,8 +48,8 @@ class SearchViewController: UIViewController {
         
         errorLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         errorLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        errorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -30).isActive = true
-        errorLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 30).isActive = true
+        errorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30).isActive = true
+        errorLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30).isActive = true
         
         spinnerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         spinnerView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
@@ -113,10 +114,25 @@ class SearchViewController: UIViewController {
     // MARK: - Life-cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.fetchLastSearchCity()
         locationManager.delegate = self
-        locationManager.requestAlwaysAuthorization()
+        locationManager.distanceFilter = 500
+        locationManager.desiredAccuracy = kCLLocationAccuracyKilometer
+        if let sharing = UserDefaults.standard.value(forKey: "sharingLocation") as? Bool {
+            self.hasAuthorized = sharing
+            if sharing {
+                if !hasStartedUpdatingLocation {
+                    locationManager.startUpdatingLocation()
+                    hasStartedUpdatingLocation = true
+                }
+            } else {
+                self.fetchLastSearchCity()
+            }
+        } else {
+          
+            locationManager.requestAlwaysAuthorization()
+        }
     }
+
     
     // MARK: - UI Components
     var cityNameLabel: UILabel = {
@@ -363,6 +379,49 @@ class SearchViewController: UIViewController {
         }
     }
     
+    func fetchCurrentWeatherData(_ long: Double, _ lat: Double) {
+        if let vm = self.viewModel {
+            self.errorLabel.alpha = 0
+            self.searchAgainButton.alpha = 1
+            self.spinnerView.startAnimating()
+            vm.handleFetchWeatherInCurrentLocation(long, lat) { cityData, error  in
+                if let error = error {
+                    // Change label in the main thread
+                    DispatchQueue.main.async {
+                        self.spinnerView.stopAnimating()
+                        self.errorLabel.alpha = 1
+                        self.searchBar.alpha = 1
+                        self.errorLabel.text = error.localizedDescription.description
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        // display data
+                        if let newCityData = cityData {
+                            let main = newCityData.main
+                            let weather = newCityData.weather
+                            let clouds = newCityData.clouds
+                            let coord = newCityData.coord
+                            self.spinnerView.stopAnimating()
+                            self.searchAgainButton.alpha = 1
+                            self.searchBar.alpha = 0
+                            self.showLabels()
+                            self.cityNameLabel.text = newCityData.name
+                            self.temperatureLabel.text = "\(String(describing: self.kelvinToFahrenheit(kelvin: main.temp))) F"
+                            self.descritionLabel.text = weather[0].description
+                            self.highTempLabel.text = "H:\(String(describing: self.kelvinToFahrenheit(kelvin: main.tempMax)))"
+                            self.lowTempLabel.text = "L:\(String(describing: self.kelvinToFahrenheit(kelvin: main.tempMin)))"
+                            self.cloudCoverLabel.text = "Cloud cover is \(String(describing: clouds.all))%"
+                            self.longLabel.text = "Lon:\(String(describing: coord.lon))"
+                            self.latLabel.text = "Lat:\(String(describing: coord.lat))"
+                            
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    
     func fetchWeatherData() {
         if let searchText = self.searchBar.text, let vm = self.viewModel {
             if searchText != "" {
@@ -419,16 +478,22 @@ extension SearchViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         switch status {
         case .authorizedAlways, .authorizedWhenInUse:
-            locationManager.requestLocation()
+            UserDefaults.standard.setValue(true, forKey: "sharingLocation")
+            if !hasStartedUpdatingLocation {
+                locationManager.startUpdatingLocation()
+                hasStartedUpdatingLocation = true
+            }
             return
         case .notDetermined, .restricted, .denied:
             // Handle cases where the app does not have the required permissions
             // Default to Miami
+            UserDefaults.standard.setValue(false, forKey: "sharingLocation")
             self.fetchDefaultWeather()
             return
         @unknown default:
             // Handle any future cases that may be added to the CLAuthorizationStatus enumeration
             // Default to Miami
+            UserDefaults.standard.setValue(false, forKey: "sharingLocation")
             self.fetchDefaultWeather()
             return
         }
@@ -437,17 +502,30 @@ extension SearchViewController: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.first {
-            print("User's location: \(location)")
+            self.fetchCurrentWeatherData(location.coordinate.longitude, location.coordinate.latitude)
         }
-        // pass this location to the manager to fetch data
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         self.errorLabel.alpha = 1
-        // Allow user to research incase there is an error
+        // Allow user to research in case there is an error
         self.searchBar.alpha = 1
         self.hideLabels()
-        self.errorLabel.text = error.localizedDescription.description
+        
+        if let clError = error as? CLError {
+            switch clError.code {
+            case .denied:
+                self.errorLabel.text = "Location access denied. Please allow location access in Settings."
+                self.fetchDefaultWeather()
+            case .network:
+                self.errorLabel.text = "Network error. Please check your internet connection."
+            default:
+                self.errorLabel.text = "Error determining location: \(error.localizedDescription)"
+            }
+        } else {
+            self.errorLabel.text = "Error determining location: \(error.localizedDescription)"
+        }
     }
+
 
 }

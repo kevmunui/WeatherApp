@@ -16,6 +16,20 @@ class SearchViewModel {
     }
     
     
+    // MARK: - Handle Current Location
+    func handleFetchWeatherInCurrentLocation(_ long:Double, _ lat:Double ,completion: @escaping (WeatherCoodResponse?, Error?) -> Void){
+        if let manager = self.weatherManager {
+            manager.fetchWeatherData(latitude: lat, longitude: long) { result in
+            switch result {
+            case .success(let weatherData):
+                completion(weatherData, nil)
+            case .failure(let error):
+                completion(nil, error)
+             }
+          }
+       }
+    }
+    
     // MARK: - Handle fetch last city
     func handleFetchWeatherLastCity(completion: @escaping (WeatherResponse?, Error?) -> Void) {
         if let manager = self.weatherManager, let city = manager.lastSearchCity {

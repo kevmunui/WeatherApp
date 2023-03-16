@@ -21,6 +21,7 @@
 		0A9F082D29C2773500932207 /* WeatherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9F082C29C2773500932207 /* WeatherManager.swift */; };
 		0A9F082F29C277AA00932207 /* ApiCaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9F082E29C277AA00932207 /* ApiCaller.swift */; };
 		0A9F083129C2B3ED00932207 /* WeatherResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9F083029C2B3ED00932207 /* WeatherResponse.swift */; };
+		0A9F083329C2EF9300932207 /* WeatherCoodResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A9F083229C2EF9200932207 /* WeatherCoodResponse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,7 @@
 		0A9F082C29C2773500932207 /* WeatherManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherManager.swift; sourceTree = "<group>"; };
 		0A9F082E29C277AA00932207 /* ApiCaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiCaller.swift; sourceTree = "<group>"; };
 		0A9F083029C2B3ED00932207 /* WeatherResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherResponse.swift; sourceTree = "<group>"; };
+		0A9F083229C2EF9200932207 /* WeatherCoodResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherCoodResponse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -170,6 +172,7 @@
 			isa = PBXGroup;
 			children = (
 				0A9F083029C2B3ED00932207 /* WeatherResponse.swift */,
+				0A9F083229C2EF9200932207 /* WeatherCoodResponse.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -326,6 +329,7 @@
 				0A9F082F29C277AA00932207 /* ApiCaller.swift in Sources */,
 				0A9F082B29C2771F00932207 /* SearchViewModel.swift in Sources */,
 				0A9F07F329C2761700932207 /* AppDelegate.swift in Sources */,
+				0A9F083329C2EF9300932207 /* WeatherCoodResponse.swift in Sources */,
 				0A9F07F529C2761700932207 /* SceneDelegate.swift in Sources */,
 				0A9F082929C2771100932207 /* SearchViewController.swift in Sources */,
 				0A9F083129C2B3ED00932207 /* WeatherResponse.swift in Sources */,
