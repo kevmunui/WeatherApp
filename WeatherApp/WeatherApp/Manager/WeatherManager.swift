@@ -17,7 +17,7 @@ class WeatherManager {
     
     private init() {} // Private initializer to ensure only one instance is created
     
-    func fetchWeatherData(forCity cityName: String, completion: @escaping (Result<Data, Error>) -> Void) {
+    func fetchWeatherData(forCity cityName: String, completion: @escaping (Result<WeatherResponse, Error>) -> Void) {
         let escapedCityName = cityName.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? cityName
         let urlString = "\(baseURL)\(escapedCityName)&appid=\(apiKey)"
         
@@ -30,7 +30,18 @@ class WeatherManager {
             if let error = error {
                 completion(.failure(error))
             } else if let data = data {
-                completion(.success(data))
+                let decoder = JSONDecoder()
+                do {
+                    let weatherResponse = try decoder.decode(WeatherResponse.self, from: data)
+                    completion(.success(weatherResponse))
+                } catch let decodingError as DecodingError {
+                    // Handle parsing error here
+                    print("Parsing error: \(decodingError)")
+                    completion(.failure(decodingError))
+                } catch {
+                    // Handle other errors here
+                    completion(.failure(error))
+                }
             } else {
                 completion(.failure(NSError(domain: "No data received", code: -1, userInfo: nil)))
             }
@@ -38,4 +49,5 @@ class WeatherManager {
         
         task.resume()
     }
+
 }

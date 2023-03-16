@@ -31,7 +31,7 @@ class SearchViewController: UIViewController {
         
         
         errorLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        errorLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 35).isActive = true
+        errorLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         errorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -30).isActive = true
         errorLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 30).isActive = true
         
@@ -89,8 +89,8 @@ class SearchViewController: UIViewController {
     }()
     
     let spinnerViewLabel: UILabel = {
-        let label = UILabel(frame: CGRect(x: 30, y:55, width: 100, height: 30))
-        label.text = "Saving"
+        let label = UILabel(frame: CGRect(x: 26, y:55, width: 100, height: 30))
+        label.text = "Searching"
         label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         return label
     }()
@@ -118,7 +118,7 @@ class SearchViewController: UIViewController {
             if searchText != "" {
                 self.errorLabel.alpha = 0
                 self.spinnerView.startAnimating()
-                vm.handleFetchWeatherBtCity(searchText) { error in
+                vm.handleFetchWeatherBtCity(searchText) { cityData, error  in
                     if let error = error {
                         // Change label in the main thread
                         DispatchQueue.main.async {
@@ -130,6 +130,7 @@ class SearchViewController: UIViewController {
                         DispatchQueue.main.async {
                             // display data
                             self.spinnerView.stopAnimating()
+                            print(cityData)
                         }
                     }
                 }

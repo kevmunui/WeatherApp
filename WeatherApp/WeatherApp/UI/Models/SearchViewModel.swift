@@ -17,18 +17,18 @@ class SearchViewModel {
     
     
     // MARK: - Handle fetch call
-    func handleFetchWeatherBtCity(_ city:String, completion: @escaping(Error?) -> Void) {
+    func handleFetchWeatherBtCity(_ city:String, completion: @escaping(WeatherResponse?, Error?) -> Void) {
         if let manager = self.weatherManager {
             manager.fetchWeatherData(forCity: city) { result in
                 switch result {
                 case .success(let data):
                     // Handle the weather data
                     print("Weather data: \(data)")
-                    completion(nil)
+                    completion(data, nil)
                 case .failure(let error):
                     // Handle the error
                     print("Error: \(error.localizedDescription)")
-                    completion(error)
+                    completion(nil, error)
                 }
             }
         }
