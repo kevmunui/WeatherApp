@@ -204,7 +204,6 @@ class SearchViewController: UIViewController {
         let searchBar = UISearchBar()
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         searchBar.placeholder = "Search"
-        searchBar.showsSearchResultsButton = true
         if let searchTextField = searchBar.value(forKey: "searchField") as? UITextField {
             let borderImage = UIImage() // Create an empty UIImage
             searchTextField.borderStyle = .none // Remove the border
@@ -299,7 +298,7 @@ class SearchViewController: UIViewController {
         if let vm = self.viewModel, let manager = vm.weatherManager, let currCitySaved = manager.lastSearchCity {
             if currCitySaved != "" {
                 self.errorLabel.alpha = 0
-                self.searchAgainButton.alpha = 1
+                
                 self.spinnerView.startAnimating()
                 vm.handleFetchWeatherLastCity { cityData, error  in
                     if let error = error {
@@ -308,6 +307,7 @@ class SearchViewController: UIViewController {
                             self.spinnerView.stopAnimating()
                             self.errorLabel.alpha = 1
                             self.searchBar.alpha = 1
+                            self.searchAgainButton.alpha = 1
                             self.errorLabel.text = error.localizedDescription.description
                         }
                     } else {
